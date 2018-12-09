@@ -18,6 +18,8 @@ void init()
 	value[8][0]="";
 	value[9][0]="* content";
 	value[10][0]="{:toc}";
+	value[11][0]="";
+	value[12][0]="";
 	mp["title"]=3;
 	mp["date"]=4;
 	mp["categories"]=5;
@@ -26,65 +28,56 @@ void init()
 
 void getInf()
 {
-	int k=3;
+	int pos,s,t,len,num;
 	string reader;
 	ifstream fin("blog.inf");
 	while(getline(fin,reader))
 	{
 		cout<<reader<<endl;
-		int len=reader.length()-1,i=0;
-		while(reader[i]!='=')i++;
-		for(int j=++i;j<=len;j++)
-		{
-			cout<<"#";
-			value[k][1][j-i]=reader[j];
-		}
-		slen[k]++;
-		k++;
-		cout<<"@"<<endl;
+		len=reader.length()-1,pos=s=t=num=0;
+		while(pos<=len&&reader[pos++]!='[');s=pos;
+		while(pos<=len&&reader[pos++]!=']');t=pos-2;
+		num=mp[reader.substr(s,t)];
+		value[num][1]=reader.substr(pos,len);
+		slen[num]++;
 	}
 	return ;
 }
 
-/*void write()
+void write()
 {
+	string reader;
 	ifstream fre("blog.txt");
-	ofstream fout(name.c_str());
-	int j;
-	for(j=1;j<=2;j++)fout<<value[j][0]<<endl;
+	ofstream fout("blog.md");
 	
-	fout<<value[j][0];
-		int len=reader.length()-1,i=0;
-		while(reader[i]!='=')i++;
-		for(i=i+1;i<=len;i++)
-		{
-			fout<<reader[i];
-		}
+	for(int i=1;i<=12;i++)
+	{
+		for(int j=0;j<=slen[i];j++)
+			fout<<value[i][j];
 		fout<<endl;
-		j++;
-	for(j=7;j<=10;j++)fout<<value[j][0]<<endl;
-	fout<<endl<<endl;
+	}
 	
 	while(getline(fre,reader))
 	{
-		if(reader!="<insert>")fout<<reader<<endl;
+		if(reader!="[insert]")
+		{
+			if(reader!="")fout<<reader<<endl<<endl;
+			else fout<<endl;
+		}
 		else{
 			getline(fre,reader); 
 			ifstream fcode(reader.c_str());
-			while(getline(fcode,reader))fout<<reader<<endl;
+			while(getline(fcode,reader))
+				if(reader!="")fout<<reader<<endl<<endl;
+				else fout<<endl;
 		} 
 	}
-}*/
+}
 
 int main()
 {
 	init();
 	getInf();
-	for(int i=1;i<=10;i++)
-	{
-		for(int j=0;j<=20;j++)
-			cout<<value[i][1][j];
-		cout<<endl;
-	}
+	write();
 	return 0;
 } 

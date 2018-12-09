@@ -13,16 +13,13 @@ SAFDSFSDsfassa
 
 但是还有插入代码的测试没做
 我设置了在文章中
-如果有一行以<code>开头，则打开它的下一行的代码的地址
+如果有一行以[insert]开头，则打开它的下一行的代码的地址
 并且输出。
 
-<code>
+[insert]
 1.cpp
 
-《code》
-1.cpp
-
-<code>
+[insert]
 luogu3.htm
 
 到这里，说明插入代码的测试完成了！
