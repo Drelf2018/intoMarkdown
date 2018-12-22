@@ -2,8 +2,8 @@
 using namespace std;
 
 string name;
-string value[15][5];
-int slen[15];
+string value[20][5];
+int slen[20];
 map<string,int> mp; 
 
 void init()
@@ -20,10 +20,22 @@ void init()
 	value[10][0]="{:toc}";
 	value[11][0]="";
 	value[12][0]="";
+	mp["name"]=15;
 	mp["title"]=3;
 	mp["date"]=4;
 	mp["categories"]=5;
 	mp["tag"]=6;
+}
+
+string getTime(int c)
+{
+	char tmp[64]; 
+	string r;
+	time_t t = time(0); 
+	if(c==1)strftime( tmp, sizeof(tmp),"%Y-%m-%d %X +0800",localtime(&t) );
+	else strftime( tmp, sizeof(tmp),"%Y-%m-%d-",localtime(&t) );
+	r=tmp; 
+	return r; 
 }
 
 void getInf()
@@ -39,6 +51,7 @@ void getInf()
 		while(pos<=len&&reader[pos++]!=']');t=pos-2;
 		num=mp[reader.substr(s,t)];
 		value[num][1]=reader.substr(pos,len);
+		if(value[num][1]=="AutoTime")value[num][1]=getTime(1);
 		slen[num]++;
 	}
 	return ;
@@ -48,7 +61,7 @@ void write()
 {
 	string reader;
 	ifstream fre("blog.txt");
-	ofstream fout("blog.md");
+	ofstream fout(getTime(2).append(value[15][1]).append(".md").c_str());
 	
 	for(int i=1;i<=12;i++)
 	{
